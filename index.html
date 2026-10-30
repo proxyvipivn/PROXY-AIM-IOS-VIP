@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PROXY VIP IOS</title>
+<style>
+:root{
+  --green:#00ff88;
+  --green2:#00cc6a;
+  --green-dim:#0a3a22;
+  --bg:#031a0f;
+  --panel:#062b18;
+  --panel2:#083a21;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',sans-serif;}
+html,body{height:100%;}
+body{
+  background:
+    radial-gradient(circle at 50% -10%, #06522f 0%, #031a0f 55%, #000 100%);
+  color:#c8ffe0;
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-top:64px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== HEADER (CỐ ĐỊNH) ===== */
+header{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:64px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#073c22 0%,#041f10 100%);
+  border-bottom:2px solid var(--green);
+  box-shadow:
+    0 0 18px rgba(0,255,136,.75),
+    0 0 40px rgba(0,255,136,.35),
+    inset 0 -1px 8px rgba(0,255,136,.4);
+  z-index:1000;
+  overflow:hidden;
+}
+header::before{
+  content:'';
+  position:absolute;top:0;left:-50%;width:200%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,255,136,.12),transparent);
+  animation:sweep 4s linear infinite;
+}
+@keyframes sweep{0%{transform:translateX(-50%)}100%{transform:translateX(50%)}}
+header h1{
+  font-size:20px;
+  letter-spacing:3px;
+  font-weight:800;
+  color:var(--green);
+  text-shadow:0 0 8px var(--green),0 0 20px rgba(0,255,136,.7);
+  position:relative;z-index:1;
+}
+
+/* ===== SCREENS ===== */
+.screen{display:none;padding:20px 16px 120px;animation:fadeIn .35s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== CARD ===== */
+.card{
+  background:linear-gradient(160deg,#06301c 0%,#041a0e 100%);
+  border:1px solid rgba(0,255,136,.35);
+  border-radius:16px;
+  padding:22px 18px;
+  box-shadow:
+    0 0 20px rgba(0,255,136,.25),
+    inset 0 0 25px rgba(0,255,136,.08);
+  margin-bottom:16px;
+  position:relative;
+}
+.card.glow{
+  box-shadow:
+    0 0 24px rgba(0,255,136,.5),
+    0 0 60px rgba(0,255,136,.2),
+    inset 0 0 25px rgba(0,255,136,.1);
+}
+
+/* ===== KEY SCREEN ===== */
+.lock-icon{font-size:44px;text-align:center;margin-bottom:8px;filter:drop-shadow(0 0 12px var(--green));}
+.card h2{
+  text-align:center;font-size:18px;color:#fff;
+  text-shadow:0 0 10px var(--green);letter-spacing:1px;margin-bottom:6px;
+}
+.card .sub{text-align:center;font-size:13px;color:#8fd6b5;margin-bottom:18px;}
+
+.input{
+  width:100%;padding:14px 16px;border-radius:12px;
+  background:#041a0e;
+  border:1.5px solid rgba(0,255,136,.35);
+  color:#e0fff0;font-size:15px;outline:none;
+  transition:.25s;
+  box-shadow:inset 0 0 10px rgba(0,255,136,.08);
+}
+.input::placeholder{color:#3e7a5e;}
+.input:focus{
+  border-color:var(--green);
+  box-shadow:0 0 18px rgba(0,255,136,.6),inset 0 0 14px rgba(0,255,136,.2);
+}
+.btn{
+  width:100%;margin-top:14px;padding:15px;border:none;border-radius:12px;
+  background:linear-gradient(180deg,#00ff88,#00b35f);
+  color:#002611;font-size:16px;font-weight:800;letter-spacing:1.5px;
+  cursor:pointer;transition:.2s;
+  box-shadow:0 0 20px rgba(0,255,136,.6),0 4px 15px rgba(0,0,0,.5);
+}
+.btn:active{transform:scale(.97);box-shadow:0 0 35px rgba(0,255,136,.9);}
+.hint{margin-top:18px;text-align:center;font-size:12px;color:#6fb894;}
+.hint p{margin-bottom:8px;}
+.hint code{
+  display:block;margin:5px 0;padding:8px 10px;border-radius:8px;
+  background:#021009;border:1px dashed rgba(0,255,136,.35);
+  color:var(--green);font-size:12px;letter-spacing:.5px;
+  word-break:break-all;
+}
+
+/* ===== SUCCESS OVERLAY ===== */
+.success-overlay{
+  position:fixed;inset:0;z-index:2000;
+  display:none;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(circle,rgba(0,40,20,.85),rgba(0,0,0,.95));
+  backdrop-filter:blur(4px);
+}
+.success-overlay.show{display:flex;animation:pop .35s ease;}
+.success-overlay .check{font-size:90px;filter:drop-shadow(0 0 25px var(--green));animation:bounce .6s ease;}
+.success-overlay p{
+  margin-top:16px;font-size:20px;font-weight:800;color:var(--green);
+  letter-spacing:2px;text-shadow:0 0 15px var(--green);
+}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+@keyframes bounce{0%{transform:scale(.3)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* ===== HAMBURGER & SIDEBAR ===== */
+.hamburger{
+  position:fixed;top:12px;left:12px;z-index:1100;
+  width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(180deg,#083a21,#041a0e);
+  border:1.5px solid var(--green);
+  color:var(--green);font-size:20px;cursor:pointer;
+  box-shadow:0 0 14px rgba(0,255,136,.6);
+  display:none;align-items:center;justify-content:center;
+}
+.hamburger.show{display:flex;}
+.hamburger:active{transform:scale(.94);}
+
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1150;
+  display:none;backdrop-filter:blur(2px);
+}
+.overlay.show{display:block;animation:pop .2s;}
+.sidebar{
+  position:fixed;top:0;left:-280px;width:270px;height:100%;z-index:1200;
+  background:linear-gradient(180deg,#041f10 0%,#021009 100%);
+  border-right:2px solid var(--green);
+  box-shadow:6px 0 30px rgba(0,255,136,.35);
+  transition:left .3s ease;
+  padding:80px 14px 30px;
+  overflow-y:auto;
+}
+.sidebar.open{left:0;}
+.sidebar h3{
+  color:var(--green);font-size:13px;letter-spacing:2px;margin-bottom:14px;
+  text-shadow:0 0 8px var(--green);
+}
+.menu-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 12px;margin-bottom:8px;border-radius:10px;
+  background:rgba(0,255,136,.05);
+  border:1px solid rgba(0,255,136,.25);
+  color:#c8ffe0;font-size:14px;cursor:pointer;transition:.2s;
+}
+.menu-item:active{background:rgba(0,255,136,.2);transform:scale(.98);}
+.menu-item .ico{font-size:18px;}
+.menu-item.active{
+  background:rgba(0,255,136,.18);
+  border-color:var(--green);
+  box-shadow:0 0 14px rgba(0,255,136,.5);
+  color:#fff;
+}
+
+/* ===== SECTION TITLES ===== */
+.sec-title{
+  font-size:16px;color:var(--green);letter-spacing:1.5px;font-weight:800;
+  text-shadow:0 0 10px rgba(0,255,136,.8);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.sec-title::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,rgba(0,255,136,.6),transparent);
+}
+
+/* ===== ROW ===== */
+.row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 14px;margin-bottom:10px;border-radius:12px;
+  background:rgba(0,255,136,.04);
+  border:1px solid rgba(0,255,136,.22);
+}
+.row .label{font-size:14px;color:#d4ffe8;font-weight:600;}
+.row .label small{display:block;font-size:11px;color:#6fb894;margin-top:3px;font-weight:400;}
+
+/* ===== TOGGLE SWITCH ===== */
+.switch-wrap{display:flex;align-items:center;gap:8px;}
+.switch-wrap .st{font-size:10px;color:#5d9c7a;letter-spacing:1px;font-weight:700;}
+.switch-wrap .st.on{color:var(--green);text-shadow:0 0 8px var(--green);}
+.switch{position:relative;display:inline-block;width:54px;height:28px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{
+  position:absolute;cursor:pointer;inset:0;
+  background:#141414;border:1px solid #333;border-radius:28px;transition:.3s;
+}
+.slider::before{
+  content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;
+  background:#666;border-radius:50%;transition:.3s;
+}
+.switch input:checked + .slider{
+  background:rgba(0,255,136,.2);border-color:var(--green);
+  box-shadow:0 0 14px rgba(0,255,136,.7);
+}
+.switch input:checked + .slider::before{
+  transform:translateX(26px);background:var(--green);
+  box-shadow:0 0 10px var(--green);
+}
+
+/* ===== FF SELECT ===== */
+.ff-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+.ff-card{
+  padding:20px 10px;border-radius:14px;text-align:center;cursor:pointer;
+  background:rgba(0,255,136,.04);
+  border:1.5px solid rgba(0,255,136,.25);
+  transition:.2s;
+}
+.ff-card:active{transform:scale(.97);}
+.ff-card.sel{
+  background:rgba(0,255,136,.18);
+  border-color:var(--green);
+  box-shadow:0 0 20px rgba(0,255,136,.6);
+}
+.ff-card .em{font-size:30px;display:block;margin-bottom:6px;}
+.ff-card .nm{font-size:13px;font-weight:700;color:#d4ffe8;}
+
+/* ===== PROGRESS RING ===== */
+.loader-wrap{text-align:center;padding:24px 0;display:none;}
+.loader-wrap.show{display:block;}
+.ring{
+  width:160px;height:160px;border-radius:50%;margin:0 auto;
+  background:conic-gradient(var(--green) 0deg, #0a2a1a 0deg);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(0,255,136,.55),inset 0 0 20px rgba(0,255,136,.15);
+  transition:background .1s linear;
+}
+.ring-inner{
+  width:126px;height:126px;border-radius:50%;
+  background:#04160d;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;font-weight:900;color:var(--green);
+  text-shadow:0 0 14px var(--green);
+  box-shadow:inset 0 0 20px rgba(0,255,136,.25);
+}
+.loader-text{margin-top:16px;font-size:14px;color:#8fd6b5;letter-spacing:1px;}
+.loader-text.ok{color:var(--green);font-weight:800;text-shadow:0 0 10px var(--green);}
+
+/* ===== RANGE ===== */
+.range-box{padding:8px 4px;}
+.range-val{
+  display:flex;justify-content:space-between;margin-bottom:10px;
+  font-size:13px;color:#8fd6b5;
+}
+.range-val b{color:var(--green);text-shadow:0 0 8px var(--green);}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:8px;border-radius:8px;outline:none;
+  background:linear-gradient(90deg,var(--green) 0%,var(--green) 0%,#0a2a1a 0%);
+  box-shadow:inset 0 0 10px rgba(0,0,0,.7),0 0 12px rgba(0,255,136,.4);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle,#00ff88,#00b35f);
+  cursor:pointer;box-shadow:0 0 16px var(--green),0 0 30px rgba(0,255,136,.6);
+  border:2px solid #052b18;
+}
+input[type=range]::-moz-range-thumb{
+  width:24px;height:24px;border-radius:50%;background:var(--green);
+  cursor:pointer;box-shadow:0 0 16px var(--green);border:none;
+}
+
+/* ===== FILE UPLOAD ===== */
+.file-box{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;border-radius:12px;
+  background:rgba(0,255,136,.05);
+  border:1.5px dashed rgba(0,255,136,.4);
+  margin-top:8px;
+}
+.file-icon{font-size:34px;filter:drop-shadow(0 0 10px var(--green));}
+.file-info{flex:1;min-width:0;}
+.file-info .fn{font-size:13px;color:#d4ffe8;font-weight:700;word-break:break-all;}
+.file-info .fs{font-size:11px;color:#6fb894;margin-top:3px;}
+.file-plus{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#00ff88,#00b35f);
+  color:#002611;font-size:26px;font-weight:900;cursor:pointer;
+  box-shadow:0 0 20px rgba(0,255,136,.75);
+  transition:.2s;
+}
+.file-plus:active{transform:scale(.9);}
+.file-box.loaded{border-style:solid;border-color:var(--green);box-shadow:0 0 18px rgba(0,255,136,.5);}
+
+/* ===== DEVICE LIST ===== */
+.device-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px;border-radius:12px;margin-bottom:10px;
+  background:rgba(0,255,136,.05);
+  border:1px solid rgba(0,255,136,.25);
+}
+.device-item .di{font-size:24px;}
+.device-item .dt{flex:1;font-size:13px;}
+.device-item .dt b{color:var(--green);}
+.device-item .dt small{display:block;color:#6fb894;margin-top:3px;font-size:11px;}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(120px);
+  padding:14px 22px;border-radius:12px;
+  background:linear-gradient(180deg,#083a21,#041a0e);
+  border:1.5px solid var(--green);
+  color:var(--green);font-size:14px;font-weight:700;
+  box-shadow:0 0 25px rgba(0,255,136,.75);
+  z-index:3000;transition:.35s;white-space:nowrap;max-width:92vw;
+  text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.err{border-color:#ff3b3b;color:#ff6b6b;box-shadow:0 0 25px rgba(255,60,60,.7);}
+
+/* ===== KEY BADGE ===== */
+.badge{
+  display:inline-block;padding:4px 10px;border-radius:20px;
+  background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.5);
+  color:var(--green);font-size:11px;font-weight:800;letter-spacing:1px;
+  text-shadow:0 0 6px var(--green);
+}
+
+.empty{text-align:center;color:#4d8a6c;font-size:13px;padding:20px 0;}
+
+/* Ẩn khi chưa cần */
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER CỐ ĐỊNH ===== -->
+<header>
+  <h1>PROXY VIP IOS</h1>
+</header>
+
+<button class="hamburger" id="hamburger" onclick="toggleMenu()">☰</button>
+
+<!-- ===== SIDEBAR MENU ===== -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<nav class="sidebar" id="sidebar">
+  <h3>DANH MỤC</h3>
+  <div class="menu-item active" data-sec="ff" onclick="showSection('ff')">
+    <span class="ico">🔥</span> Free Fire - Free Fire Max
+  </div>
+  <div class="menu-item" data-sec="aim" onclick="showSection('aim')">
+    <span class="ico">🎯</span> AIM - Antena
+  </div>
+  <div class="menu-item" data-sec="ib" onclick="showSection('ib')">
+    <span class="ico">🆔</span> Nhập IB game
+  </div>
+  <div class="menu-item" data-sec="device" onclick="showSection('device')">
+    <span class="ico">📱</span> Thiết bị
+  </div>
+  <div class="menu-item" data-sec="keytime" onclick="showSection('keytime')">
+    <span class="ico">⏱️</span> Thời gian key
+  </div>
+  <div class="menu-item" data-sec="config" onclick="showSection('config')">
+    <span class="ico">📁</span> Nhập file config antiban
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================= SCREEN 1: NHẬP KEY ================= -->
+  <section class="screen active" id="screen-key">
+    <div class="card glow">
+      <div class="lock-icon">🔐</div>
+      <h2>PROXY IOS VIP 1 thiết bị</h2>
+      <p class="sub">Nhập key để kích hoạt…</p>
+      <input id="keyInput" class="input" placeholder="Nhập key tại đây…" autocomplete="off" spellcheck="false">
+      <button class="btn" onclick="activateKey()">KÍCH HOẠT</button>
+      <div class="hint">
+        <p>Key có sẵn:</p>
+        <code>PROXY-3018484-IOS-103-VIP</code>
+        <code>PROXY-4928478-IOS-100-VIP</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN 2: NHẬP THÔNG TIN ================= -->
+  <section class="screen" id="screen-device">
+    <div class="card glow">
+      <h2 style="text-align:left;margin-bottom:16px;">Nhập đầy đủ thông tin 👤</h2>
+
+      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">LOẠI MÁY</label>
+      <input class="input" id="devType" value="IOS" readonly
+             style="margin:6px 0 14px;color:var(--green);font-weight:800;letter-spacing:2px;">
+
+      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">TÊN MÁY</label>
+      <input class="input" id="devName" placeholder="VD: iPhone 12"
+             style="margin:6px 0 14px;" autocomplete="off">
+
+      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">IOS BAO NHIÊU</label>
+      <input class="input" id="devIOS" placeholder="VD: 27.0"
+             style="margin:6px 0 18px;" autocomplete="off">
+
+      <button class="btn" onclick="confirmDevice()">XÁC NHẬN</button>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN 3: MAIN ================= -->
+  <section class="screen" id="screen-main">
+
+    <!-- ===== FF ===== -->
+    <div class="section" id="sec-ff">
+      <div class="card">
+        <div class="sec-title">🔥 FREE FIRE - FREE FIRE MAX</div>
+        <p style="font-size:12px;color:#8fd6b5;margin-bottom:14px;">
+          Dùng Free Fire gì thì chọn Free Fire đó. Phải chọn Free Fire gì mới bật được hack.
+        </p>
+        <div class="ff-options">
+          <div class="ff-card" id="ff-card-ff" onclick="startFFLoad('ff')">
+            <span class="em">🔥</span>
+            <span class="nm">FREE FIRE</span>
+          </div>
+          <div class="ff-card" id="ff-card-max" onclick="startFFLoad('ffmax')">
+            <span class="em">🔥🔥</span>
+            <span class="nm">FREE FIRE MAX</span>
+          </div>
+        </div>
+
+        <div class="loader-wrap" id="loaderWrap">
+          <div class="ring" id="ring">
+            <div class="ring-inner" id="ringPct">0%</div>
+          </div>
+          <div class="loader-text" id="loaderText">Đang nạp… 0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== AIM ===== -->
+    <div class="section hidden" id="sec-aim">
+      <div class="card">
+        <div class="sec-title">🎯 AIM - ANTENA</div>
+        <div id="aimList"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title">📡 ANTENA VIP</div>
+        <p style="font-size:12px;color:#8fd6b5;margin-bottom:12px;">
+          Định vị quay màn hình — chỉnh từ 0% đến 100%
+        </p>
+        <div class="range-box">
+          <div class="range-val">
+            <span>0%</span>
+            <b id="antVal">50%</b>
+            <span>100%</span>
+          </div>
+          <input type="range" id="antRange" min="0" max="100" value="50"
+                 oninput="updateAntena(this.value)">
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== IB ===== -->
+    <div class="section hidden" id="sec-ib">
+      <div class="card">
+        <div class="sec-title">🆔 NHẬP IB GAME</div>
+        <input class="input" id="ibInput" placeholder="ib: …………………" autocomplete="off">
+        <button class="btn" onclick="saveIB()">LƯU IB</button>
+        <p id="ibSaved" style="margin-top:12px;font-size:12px;color:var(--green);text-align:center;display:none;">
+          ✅ Đã lưu IB: <b id="ibShow"></b>
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== DEVICE ===== -->
+    <div class="section hidden" id="sec-device">
+      <div class="card">
+        <div class="sec-title">📱 THIẾT BỊ ĐÃ NHẬP</div>
+        <div id="deviceList">
+          <div class="empty">Chưa có thiết bị nào</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== KEY TIME ===== -->
+    <div class="section hidden" id="sec-keytime">
+      <div class="card">
+        <div class="sec-title">⏱️ THỜI GIAN KEY</div>
+        <div id="keyTimeBox">
+          <div class="empty">Chưa kích hoạt key</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CONFIG ===== -->
+    <div class="section hidden" id="sec-config">
+      <div class="card">
+        <div class="sec-title">📁 NHẬP FILE CONFIG - ANTIBAN</div>
+        <div class="file-box" id="fileBox">
+          <div class="file-icon">📄</div>
+          <div class="file-info">
+            <div class="fn" id="fileName">Chưa có file config</div>
+            <div class="fs" id="fileSize">Nhấn dấu + để nhập file</div>
+          </div>
+          <div class="file-plus" onclick="document.getElementById('fileInput').click()">+</div>
+        </div>
+        <input type="file" id="fileInput" class="hidden" accept="*/*" onchange="handleConfig(this)">
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- ===== OVERLAY THÀNH CÔNG ===== -->
+<div class="success-overlay" id="successOverlay">
+  <div class="check">✅</div>
+  <p>KÍCH HOẠT THÀNH CÔNG</p>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= STATE ================= */
+const state = {
+  activated: false,
+  key: null,
+  keyTime: null,          // '1 ngày' | '7 ngày' | '30 ngày' | 'Vĩnh viễn'
+  device: null,           // {name, ios}
+  devices: [],            // danh sách thiết bị
+  config: null,           // {name, size, content}
+  ffMode: null,           // 'ff' | 'ffmax'
+  ib: '',
+  aims: {                 // 6 loại aim
+    'drag': false,
+    'neck': false,
+    'body': false,
+    'drag_ant': false,
+    'neck_ant': false,
+    'body_ant': false
+  },
+  antPower: 50
+};
+
+/* Danh sách key hợp lệ */
+const VALID_KEYS = {
+  'PROXY-3018484-IOS-103-VIP': { time: 'Vĩnh viễn' },
+  'PROXY-4928478-IOS-100-VIP': { time: 'Vĩnh viễn' }
+};
+
+/* Các loại aim */
+const AIM_LIST = [
+  { id: 'drag',      name: 'AIM → Drag' },
+  { id: 'neck',      name: 'AIM → Neck' },
+  { id: 'body',      name: 'AIM → Body' },
+  { id: 'drag_ant',  name: 'AIM → Drag + Antena' },
+  { id: 'neck_ant',  name: 'AIM → Neck + Antena' },
+  { id: 'body_ant',  name: 'AIM → Body + Antena' }
+];
+
+/* ================= TOAST ================= */
+let toastTimer;
+function toast(msg, err = false){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('err', err);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ================= SCREEN ================= */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ================= 1. KÍCH HOẠT KEY ================= */
+function activateKey(){
+  const input = document.getElementById('keyInput');
+  const key = input.value.trim().toUpperCase();
+
+  if(!key){
+    toast('Vui lòng nhập key ❌', true);
+    return;
+  }
+
+  const found = VALID_KEYS[key];
+  if(!found){
+    toast('Key không hợp lệ ❌', true);
+    input.style.borderColor = '#ff3b3b';
+    setTimeout(() => input.style.borderColor = '', 900);
+    return;
+  }
+
+  // Thành công
+  state.activated = true;
+  state.key = key;
+  state.keyTime = found.time;
+
+  // Hiện overlay ✅ trong 3 giây
+  const ov = document.getElementById('successOverlay');
+  ov.classList.add('show');
+
+  setTimeout(() => {
+    ov.classList.remove('show');
+    showScreen('screen-device');
+  }, 3000);
+}
+
+/* ================= 2. XÁC NHẬN THIẾT BỊ ================= */
+function confirmDevice(){
+  const name = document.getElementById('devName').value.trim();
+  const ios  = document.getElementById('devIOS').value.trim();
+
+  if(!name){ toast('Nhập tên máy ❌', true); return; }
+  if(!ios){  toast('Nhập phiên bản IOS ❌', true); return; }
+
+  state.device = { name, ios };
+  state.devices.push({
+    name,
+    ios,
+    time: new Date().toLocaleString('vi-VN')
+  });
+
+  // Hiện thông báo
+  toast('🚀 Thiết bị tương thích thành công 🚀');
+
+  // Chuyển vào main + mở menu
+  setTimeout(() => {
+    showScreen('screen-main');
+    document.getElementById('hamburger').classList.add('show');
+    renderDevices();
+    renderKeyTime();
+    renderAimList();
+    showSection('ff');
+  }, 700);
+}
+
+/* ================= MENU ================= */
+function toggleMenu(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+function showSection(sec){
+  // ẩn tất cả
+  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+  document.getElementById('sec-' + sec).classList.remove('hidden');
+
+  // menu active
+  document.querySelectorAll('.menu-item').forEach(m => {
+    m.classList.toggle('active', m.dataset.sec === sec);
+  });
+
+  // đóng menu
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================= 3. FREE FIRE LOAD ================= */
+function startFFLoad(mode){
+  // reset chọn
+  document.getElementById('ff-card-ff').classList.remove('sel');
+  document.getElementById('ff-card-max').classList.remove('sel');
+  document.getElementById(mode === 'ff' ? 'ff-card-ff' : 'ff-card-max').classList.add('sel');
+
+  state.ffMode = mode;
+
+  const wrap = document.getElementById('loaderWrap');
+  const ring = document.getElementById('ring');
+  const pct  = document.getElementById('ringPct');
+  const txt  = document.getElementById('loaderText');
+
+  wrap.classList.add('show');
+  txt.classList.remove('ok');
+  txt.textContent = 'Đang nạp… 0%';
+
+  let p = 0;
+  const timer = setInterval(() => {
+    p += Math.random() * 7 + 3;
+    if(p >= 100) p = 100;
+
+    pct.textContent = Math.floor(p) + '%';
+    ring.style.background =
+      `conic-gradient(var(--green) ${p * 3.6}deg, #0a2a1a ${p * 3.6}deg)`;
+    txt.textContent = 'Đang nạp… ' + Math.floor(p) + '%';
+
+    if(p >= 100){
+      clearInterval(timer);
+      txt.textContent = '✅ Nhập thành công';
+      txt.classList.add('ok');
+      toast('🔥 ' + (mode === 'ff' ? 'FREE FIRE' : 'FREE FIRE MAX') + ' đã chọn — Nhập thành công');
+    }
+  }, 90);
+}
+
+/* ================= 4. AIM LIST ================= */
+function renderAimList(){
+  const box = document.getElementById('aimList');
+  box.innerHTML = '';
+
+  AIM_LIST.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `
+      <div class="label">${item.name}</div>
+      <div class="switch-wrap">
+        <span class="st" id="st-off-${item.id}">TẮT</span>
+        <label class="switch">
+          <input type="checkbox" data-aim="${item.id}"
+                 ${state.aims[item.id] ? 'checked' : ''}
+                 onchange="onAimToggle(this)">
+          <span class="slider"></span>
+        </label>
+        <span class="st" id="st-on-${item.id}">BẬT</span>
+      </div>
+    `;
+    box.appendChild(row);
+  });
+}
+
+function onAimToggle(el){
+  const id = el.dataset.aim;
+
+  // Chưa có file config → chặn
+  if(!state.config){
+    el.checked = false;
+    toast('Bạn cần nhập file-cofing-antiban ❌', true);
+    return;
+  }
+
+  state.aims[id] = el.checked;
+  if(el.checked){
+    toast('✅ Kích hoạt thành công: ' + AIM_LIST.find(a => a.id === id).name);
+  } else {
+    toast('Đã tắt: ' + AIM_LIST.find(a => a.id === id).name);
+  }
+}
+
+/* ================= 5. ANTENA VIP ================= */
+function updateAntena(v){
+  v = parseInt(v);
+  state.antPower = v;
+  document.getElementById('antVal').textContent = v + '%';
+
+  const range = document.getElementById('antRange');
+  range.style.background =
+    `linear-gradient(90deg, var(--green) ${v}%, #0a2a1a ${v}%)`;
+}
+document.addEventListener('DOMContentLoaded', () => updateAntena(50));
+
+/* ================= 6. NHẬP IB ================= */
+function saveIB(){
+  const v = document.getElementById('ibInput').value.trim();
+  if(!v){ toast('Vui lòng nhập IB ❌', true); return; }
+
+  state.ib = v;
+  document.getElementById('ibShow').textContent = v;
+  document.getElementById('ibSaved').style.display = 'block';
+  toast('✅ Đã lưu IB game');
+}
+
+/* ================= 7. RENDER DEVICES ================= */
+function renderDevices(){
+  const box = document.getElementById('deviceList');
+  if(state.devices.length === 0){
+    box.innerHTML = '<div class="empty">Chưa có thiết bị nào</div>';
+    return;
+  }
+  box.innerHTML = state.devices.map(d => `
+    <div class="device-item">
+      <div class="di">📱</div>
+      <div class="dt">
+        <b>${escapeHtml(d.name)}</b>
+        <small>IOS ${escapeHtml(d.ios)} • ${d.time}</small>
+      </div>
+      <span class="badge">ĐÃ LƯU</span>
+    </div>
+  `).join('');
+}
+
+/* ================= 8. RENDER KEY TIME ================= */
+function renderKeyTime(){
+  const box = document.getElementById('keyTimeBox');
+  if(!state.key){
+    box.innerHTML = '<div class="empty">Chưa kích hoạt key</div>';
+    return;
+  }
+  box.innerHTML = `
+    <div class="row">
+      <div class="label">Thời gian key<small>${escapeHtml(state.key)}</small></div>
+      <span class="badge">${state.keyTime}</span>
+    </div>
+    <div class="row">
+      <div class="label">Trạng thái</div>
+      <span class="badge">✅ ĐÃ KÍCH HOẠT</span>
+    </div>
+  `;
+}
+
+/* ================= 9. NHẬP FILE CONFIG ================= */
+function handleConfig(input){
+  const file = input.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.config = {
+      name: 'PROXYfile-cofing-antiban',
+      original: file.name,
+      size: file.size,
+      content: e.target.result
+    };
+
+    document.getElementById('fileBox').classList.add('loaded');
+    document.getElementById('fileName').textContent = 'PROXYfile-cofing-antiban';
+    document.getElementById('fileSize').textContent =
+      formatSize(file.size) + ' • Đã nạp vào tệp';
+
+    toast('✅ Đã nhập file config antiban');
+  };
+  reader.readAsText(file);
+}
+
+function formatSize(b){
+  if(b < 1024) return b + ' B';
+  if(b < 1048576) return (b/1024).toFixed(1) + ' KB';
+  return (b/1048576).toFixed(2) + ' MB';
+}
+
+/* ================= UTIL ================= */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+/* ================= ENTER KEY ================= */
+document.getElementById('keyInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') activateKey();
+});
+</script>
+</body>
+</html>
