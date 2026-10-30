@@ -6,7 +6,7 @@
 <title>PROXY VIP IOS</title>
 <style>
 :root{
-  --primary:#0ea5e9; /* Xanh đại dương */
+  --primary:#0ea5e9;
   --primary-dark:#0284c7;
   --primary-light:#e0f2fe;
   --bg:#f0f9ff;
@@ -537,7 +537,7 @@ input[type=range]::-webkit-slider-thumb{
   </section>
 </main>
 
-<!-- ===== FAKE iOS FILE PICKER (MÔ PHỎNG HÌNH 1 & 2) ===== -->
+<!-- ===== FAKE iOS FILE PICKER ===== -->
 <div class="ios-picker-overlay" id="iosPicker">
   <div class="ios-picker">
     <div class="ios-picker-header">
@@ -545,14 +545,12 @@ input[type=range]::-webkit-slider-thumb{
       <button onclick="closeIOSPicker()">Hủy</button>
     </div>
     
-    <!-- Thanh tìm kiếm (Đã đổi thành Nhập file) -->
     <div class="ios-search">
       <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
       <input type="text" placeholder="Nhập file" readonly>
     </div>
 
     <div class="ios-files-list">
-      <!-- File config có sẵn (giống hình 1) -->
       <div class="ios-file-item" onclick="selectFileFromPicker()">
         <div class="ios-file-icon">
           <div class="lines"></div>
@@ -563,7 +561,6 @@ input[type=range]::-webkit-slider-thumb{
         </div>
       </div>
       
-      <!-- Các file rác giả lập cho giống hình 1 -->
       <div class="ios-file-item" style="opacity: 0.6;">
         <div class="ios-file-icon">
           <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#0ea5e9;margin-top:8px;"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
@@ -737,7 +734,7 @@ function startFFLoad(mode){
   document.getElementById('ff-card-max').classList.remove('sel');
   document.getElementById(mode === 'ff' ? 'ff-card-ff' : 'ff-card-max').classList.add('sel');
 
-  state.ffMode = mode;
+  state.ffMode = mode; // Lưu trạng thái FF
 
   const wrap = document.getElementById('loaderWrap');
   const ring = document.getElementById('ring');
@@ -761,7 +758,7 @@ function startFFLoad(mode){
       clearInterval(timer);
       txt.textContent = '✅ Nhập thành công';
       txt.classList.add('ok');
-      toast('🔥 ' + (mode === 'ff' ? 'FREE FIRE' : 'FREE FIRE MAX') + ' đã sẵn sàng!');
+      toast('🔥 ' + (mode === 'ff' ? 'FREE FIRE' : 'FREE FIRE MAX') + ' đã chọn!');
     }
   }, 100);
 }
@@ -789,13 +786,32 @@ function renderAimList(){
   });
 }
 
+// BẮT BUỘC ĐỦ 3 ĐIỀU KIỆN MỚI CHO BẬT AIM
 function onAimToggle(el){
   const id = el.dataset.aim;
-  if(!state.config){
+
+  // 1. Kiểm tra Free Fire
+  if(!state.ffMode){
     el.checked = false;
-    toast('Vui lòng nhập file-cofing-antiban trước ❌', true);
+    toast('Vui lòng chọn Free Fire trước ❌', true);
     return;
   }
+
+  // 2. Kiểm tra IB Game
+  if(!state.ib){
+    el.checked = false;
+    toast('Vui lòng nhập IB game trước ❌', true);
+    return;
+  }
+
+  // 3. Kiểm tra File Config
+  if(!state.config){
+    el.checked = false;
+    toast('Vui lòng nhập file config antiban trước ❌', true);
+    return;
+  }
+
+  // Nếu đã đủ điều kiện
   state.aims[id] = el.checked;
   toast(el.checked ? '✅ Kích hoạt thành công' : 'Đã tắt tính năng');
 }
@@ -814,7 +830,7 @@ document.addEventListener('DOMContentLoaded', () => updateAntena(50));
 function saveIB(){
   const v = document.getElementById('ibInput').value.trim();
   if(!v){ toast('Vui lòng nhập IB!', true); return; }
-  state.ib = v;
+  state.ib = v; // Lưu trạng thái IB
   document.getElementById('ibShow').textContent = v;
   document.getElementById('ibSaved').style.display = 'block';
   toast('✅ Đã lưu IB game');
@@ -859,22 +875,17 @@ function renderKeyTime(){
 }
 
 /* ================= 9. XỬ LÝ CHỌN FILE (MÔ PHỎNG IOS) ================= */
-
-// Mở bảng chọn file
 function openIOSPicker() {
   document.getElementById('iosPicker').classList.add('show');
 }
 
-// Đóng bảng chọn file
 function closeIOSPicker() {
   document.getElementById('iosPicker').classList.remove('show');
 }
 
-// Khi người dùng bấm vào file "File config antiban"
 function selectFileFromPicker() {
-  closeIOSPicker(); // Đóng bảng chọn
+  closeIOSPicker(); 
   
-  // Hiện loading overlay
   const overlay = document.getElementById('loadingFileOverlay');
   overlay.classList.add('show');
   
@@ -888,7 +899,6 @@ function selectFileFromPicker() {
   text.textContent = 'Đang nhập file...';
   text.style.color = 'var(--text-sub)';
 
-  // Chạy hiệu ứng 0% - 100%
   const timer = setInterval(() => {
     p += Math.random() * 15 + 5;
     if (p >= 100) p = 100;
@@ -902,21 +912,17 @@ function selectFileFromPicker() {
       text.style.color = 'var(--primary-dark)';
       pctText.style.color = 'var(--primary-dark)';
       
-      // Sau 1 giây thì tắt overlay và cập nhật trạng thái
       setTimeout(() => {
         overlay.classList.remove('show');
         
-        // Cập nhật state
-        state.config = { name: 'PROXYfile-cofing-antiban', size: 2048 };
+        state.config = { name: 'PROXYfile-cofing-antiban', size: 2048 }; // Lưu trạng thái Config
         
-        // Cập nhật giao diện file box
         document.getElementById('fileBox').classList.add('loaded');
         document.getElementById('fileName').textContent = 'File config antiban';
         document.getElementById('fileSize').textContent = '2 KB • Đã nạp vào tệp ✅';
         
         toast('✅ Đã nạp file config thành công');
         
-        // Reset màu loading cho lần sau
         text.style.color = 'var(--text-sub)';
         pctText.style.color = 'var(--primary-dark)';
       }, 1000);
