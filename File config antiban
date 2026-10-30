@@ -1,0 +1,75 @@
+# =========================================
+#  PROXYfile-cofing-antiban
+#  Anti-Ban Configuration - PROXY VIP IOS
+#  Version: 1.0.0
+# =========================================
+
+[PROXY]
+version     = 1.0.0
+device      = IOS
+mode        = VIP
+status      = ENABLED
+license     = PROXY-3018484-IOS-103-VIP
+owner       = PROXY VIP IOS
+
+[ANTIBAN]
+enabled           = true
+bypass_safetynet  = true
+spoof_device_id   = true
+hide_root         = true
+randomize_mac     = true
+delay_ms          = 120
+safe_mode         = STRICT
+detect_emulator   = false
+detect_xposed     = false
+hide_magisk       = true
+hide_debugger     = true
+
+[AIM]
+smooth            = 0.85
+fov               = 180
+max_distance      = 400
+prediction        = true
+humanize          = true
+target_priority   = HEAD
+aim_speed         = 1.0
+aim_drag          = true
+aim_neck          = true
+aim_body          = true
+
+[ANTENA]
+enabled           = true
+sensitivity       = 1.0
+rotate_lock       = false
+priority          = HEAD
+power             = 50
+position_x        = 0.5
+position_y        = 0.5
+scale             = 1.0
+
+[FREE_FIRE]
+version           = BOTH
+mode              = FF_MAX
+region            = VN
+resolution        = AUTO
+fps_limit         = 90
+graphics          = SMOOTH
+
+[NETWORK]
+protocol          = TLS
+port              = 443
+retry             = 3
+timeout           = 15000
+server            = proxy.vip.ios
+encrypt           = AES-256
+
+[SIGNATURE]
+checksum          = 9F3A-B17C-4491-DA20
+md5               = a3f5b8c9d2e1f4a7b6c3d8e9f1a2b4c5
+owner             = PROXY VIP IOS
+build_date        = 2025-01-01
+expire_date       = NEVER
+
+# =========================================
+#  END OF FILE
+# =========================================
