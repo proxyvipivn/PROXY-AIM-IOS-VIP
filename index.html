@@ -54,7 +54,7 @@ header svg{width:24px;height:24px;fill:var(--primary-dark);}
 .screen.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== CARD (Kính mờ) ===== */
+/* ===== CARD ===== */
 .card{
   background:var(--white);
   border-radius:24px;
@@ -126,7 +126,7 @@ header svg{width:24px;height:24px;fill:var(--primary-dark);}
 @keyframes pop{from{opacity:0}to{opacity:1}}
 @keyframes bounce{0%{transform:scale(.3)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 
-/* ===== HAMBURGER (Nút Menu tròn) ===== */
+/* ===== HAMBURGER ===== */
 .hamburger{
   position:fixed;top:15px;left:15px;z-index:1100;
   width:40px;height:40px;border-radius:50%;
@@ -229,7 +229,7 @@ input[type=range]::-webkit-slider-thumb{
   box-shadow:0 2px 8px rgba(14, 165, 233, 0.4);
 }
 
-/* ===== FILE UPLOAD ===== */
+/* ===== FILE UPLOAD (WEB) ===== */
 .file-box{
   display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;
   background:#f8fafc;border:2px dashed #cbd5e1;margin-top:8px;transition:.3s;
@@ -248,6 +248,67 @@ input[type=range]::-webkit-slider-thumb{
 }
 .file-plus:active{transform:scale(.9);}
 
+/* ===== FAKE iOS FILE PICKER ===== */
+.ios-picker-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 3000; display: none; align-items: flex-end;
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+}
+.ios-picker-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+.ios-picker {
+  width: 100%; background: #f2f2f7; border-radius: 20px 20px 0 0;
+  height: 80vh; display: flex; flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.ios-picker-header {
+  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #d1d1d6;
+}
+.ios-picker-header span { font-size: 17px; font-weight: 600; color: #000; }
+.ios-picker-header button { background: none; border: none; font-size: 17px; color: var(--primary); font-weight: 600; cursor: pointer; }
+.ios-search {
+  margin: 12px 20px; background: #e3e3e8; border-radius: 10px;
+  display: flex; align-items: center; padding: 8px 12px; gap: 8px;
+}
+.ios-search input {
+  border: none; background: transparent; font-size: 17px; color: #000; outline: none; width: 100%;
+}
+.ios-search input::placeholder { color: #8e8e93; }
+.ios-search svg { width: 18px; height: 18px; fill: #8e8e93; }
+.ios-files-list { flex: 1; overflow-y: auto; padding: 0 20px; }
+.ios-file-item {
+  background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 16px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.ios-file-item:active { background: #e5e5ea; }
+.ios-file-icon { width: 40px; height: 48px; background: #fff; border: 1px solid #d1d1d6; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.ios-file-icon::before { content: ''; position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #e5e5ea; border-bottom-left-radius: 4px; border-left: 1px solid #d1d1d6; border-bottom: 1px solid #d1d1d6; }
+.ios-file-icon .lines { width: 20px; height: 2px; background: #d1d1d6; box-shadow: 0 4px 0 #d1d1d6, 0 8px 0 #d1d1d6; margin-top: 6px; }
+.ios-file-info { flex: 1; }
+.ios-file-info .name { font-size: 16px; font-weight: 500; color: #000; margin-bottom: 4px; }
+.ios-file-info .meta { font-size: 13px; color: #8e8e93; }
+
+/* ===== LOADING FILE OVERLAY ===== */
+.loading-file-overlay {
+  position: fixed; inset: 0; background: rgba(255,255,255,0.95);
+  z-index: 4000; display: none; align-items: center; justify-content: center; flex-direction: column;
+  backdrop-filter: blur(5px);
+}
+.loading-file-overlay.show { display: flex; animation: pop 0.2s ease; }
+.loading-file-box {
+  background: #fff; padding: 30px; border-radius: 20px; text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 80%; max-width: 300px;
+}
+.progress-bar-container {
+  width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin: 20px 0; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; width: 0%; background: var(--primary); border-radius: 4px; transition: width 0.1s linear;
+}
+.loading-percent { font-size: 24px; font-weight: 800; color: var(--primary-dark); }
+.loading-text { margin-top: 10px; font-size: 14px; color: var(--text-sub); font-weight: 600; }
+
 /* ===== DEVICE LIST & BADGE ===== */
 .device-item{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;margin-bottom:12px;background:#f8fafc;border:1px solid #e2e8f0;}
 .device-item .di{width:36px;height:36px;background:var(--white);border-radius:10px;display:flex;align-items:center;justify-content:center;}
@@ -262,7 +323,7 @@ input[type=range]::-webkit-slider-thumb{
   position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(100px);
   padding:14px 24px;border-radius:30px;
   background:var(--text);color:var(--white);
-  font-size:14px;font-weight:600;z-index:3000;transition:.3s;
+  font-size:14px;font-weight:600;z-index:5000;transition:.3s;
   box-shadow:0 10px 25px rgba(0,0,0,0.2);white-space:nowrap;max-width:90vw;
 }
 .toast.show{transform:translateX(-50%) translateY(0);}
@@ -270,7 +331,6 @@ input[type=range]::-webkit-slider-thumb{
 .empty{text-align:center;color:var(--text-sub);font-size:14px;padding:24px 0;}
 .hidden{display:none !important;}
 
-/* Label Input */
 .input-label{font-size:12px;font-weight:700;color:var(--text-sub);margin:0 0 8px 4px;display:block;letter-spacing:0.5px;}
 </style>
 </head>
@@ -467,9 +527,9 @@ input[type=range]::-webkit-slider-thumb{
           </div>
           <div class="file-info">
             <div class="fn" id="fileName">Chưa nạp file config</div>
-            <div class="fs" id="fileSize">Nhấn dấu + để tự động nạp</div>
+            <div class="fs" id="fileSize">Nhấn dấu + để nhập file</div>
           </div>
-          <div class="file-plus" onclick="autoLoadConfig()">+</div>
+          <div class="file-plus" onclick="openIOSPicker()">+</div>
         </div>
       </div>
     </div>
@@ -477,7 +537,68 @@ input[type=range]::-webkit-slider-thumb{
   </section>
 </main>
 
-<!-- ===== OVERLAY ===== -->
+<!-- ===== FAKE iOS FILE PICKER (MÔ PHỎNG HÌNH 1 & 2) ===== -->
+<div class="ios-picker-overlay" id="iosPicker">
+  <div class="ios-picker">
+    <div class="ios-picker-header">
+      <span>Gần đây</span>
+      <button onclick="closeIOSPicker()">Hủy</button>
+    </div>
+    
+    <!-- Thanh tìm kiếm (Đã đổi thành Nhập file) -->
+    <div class="ios-search">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" placeholder="Nhập file" readonly>
+    </div>
+
+    <div class="ios-files-list">
+      <!-- File config có sẵn (giống hình 1) -->
+      <div class="ios-file-item" onclick="selectFileFromPicker()">
+        <div class="ios-file-icon">
+          <div class="lines"></div>
+        </div>
+        <div class="ios-file-info">
+          <div class="name">File config antiban</div>
+          <div class="meta">Hôm nay, 6:30 CH • 2 KB</div>
+        </div>
+      </div>
+      
+      <!-- Các file rác giả lập cho giống hình 1 -->
+      <div class="ios-file-item" style="opacity: 0.6;">
+        <div class="ios-file-icon">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#0ea5e9;margin-top:8px;"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <div class="ios-file-info">
+          <div class="name">con tim</div>
+          <div class="meta">Hôm nay, 6:30 CH • 7.9 MB</div>
+        </div>
+      </div>
+
+      <div class="ios-file-item" style="opacity: 0.6;">
+        <div class="ios-file-icon">
+           <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#0ea5e9;margin-top:8px;"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        <div class="ios-file-info">
+          <div class="name">thuongnhau</div>
+          <div class="meta">Hôm nay, 6:30 CH • 4.2 MB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOADING FILE OVERLAY ===== -->
+<div class="loading-file-overlay" id="loadingFileOverlay">
+  <div class="loading-file-box">
+    <div class="loading-percent" id="loadPercent">0%</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="loading-text" id="loadText">Đang nhập file...</div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS OVERLAY ===== -->
 <div class="success-overlay" id="successOverlay">
   <div class="check">
     <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -502,7 +623,6 @@ const state = {
   antPower: 50
 };
 
-/* 2 KEY ĐÚNG (Bắt buộc phải nhập đúng) */
 const VALID_KEYS = {
   'PROXY-3018484-IOS-103-VIP': { time: 'Vĩnh viễn' },
   'PROXY-4928478-IOS-100-VIP': { time: 'Vĩnh viễn' }
@@ -516,37 +636,6 @@ const AIM_LIST = [
   { id: 'neck_ant',  name: 'AIM → Neck + Antena' },
   { id: 'body_ant',  name: 'AIM → Body + Antena' }
 ];
-
-const DEFAULT_CONFIG = `# =========================================
-#  PROXYfile-cofing-antiban
-#  Anti-Ban Configuration - PROXY VIP IOS
-# =========================================
-[PROXY]
-version = 1.0.0
-device = IOS
-mode = VIP
-status = ENABLED
-[ANTIBAN]
-enabled = true
-bypass_safetynet = true
-spoof_device_id = true
-hide_root = true
-randomize_mac = true
-delay_ms = 120
-safe_mode = STRICT
-[AIM]
-smooth = 0.85
-fov = 180
-max_distance = 400
-prediction = true
-humanize = true
-[ANTENA]
-sensitivity = 1.0
-rotate_lock = false
-priority = HEAD
-[SIGNATURE]
-checksum = 9F3A-B17C-4491-DA20
-owner = PROXY VIP IOS`;
 
 /* ================= TOAST ================= */
 let toastTimer;
@@ -576,7 +665,6 @@ function activateKey(){
     return;
   }
 
-  // Nếu không nằm trong danh sách VALID_KEYS -> Báo sai
   if(!VALID_KEYS[key]){
     toast('Key không đúng ❌', true);
     input.style.borderColor = '#ef4444';
@@ -588,7 +676,6 @@ function activateKey(){
     return;
   }
 
-  // Nếu đúng key
   state.activated = true;
   state.key = key;
   state.keyTime = VALID_KEYS[key].time;
@@ -771,26 +858,70 @@ function renderKeyTime(){
   `;
 }
 
-/* ================= 9. NHẬP FILE CONFIG (AUTO) ================= */
-function autoLoadConfig(){
-  const blob = new Blob([DEFAULT_CONFIG], { type: 'text/plain;charset=utf-8' });
-  const file = new File([blob], 'PROXYfile-cofing-antiban', { type: 'text/plain' });
+/* ================= 9. XỬ LÝ CHỌN FILE (MÔ PHỎNG IOS) ================= */
 
-  const reader = new FileReader();
-  reader.onload = e => {
-    state.config = { name: 'PROXYfile-cofing-antiban', size: file.size, content: e.target.result };
-    document.getElementById('fileBox').classList.add('loaded');
-    document.getElementById('fileName').textContent = 'PROXYfile-cofing-antiban';
-    document.getElementById('fileSize').textContent = formatSize(file.size) + ' • Đã nạp thành công ✅';
-    toast('✅ Đã nạp file config thành công');
-  };
-  reader.readAsText(file);
+// Mở bảng chọn file
+function openIOSPicker() {
+  document.getElementById('iosPicker').classList.add('show');
 }
 
-function formatSize(b){
-  if(b < 1024) return b + ' B';
-  if(b < 1048576) return (b/1024).toFixed(1) + ' KB';
-  return (b/1048576).toFixed(2) + ' MB';
+// Đóng bảng chọn file
+function closeIOSPicker() {
+  document.getElementById('iosPicker').classList.remove('show');
+}
+
+// Khi người dùng bấm vào file "File config antiban"
+function selectFileFromPicker() {
+  closeIOSPicker(); // Đóng bảng chọn
+  
+  // Hiện loading overlay
+  const overlay = document.getElementById('loadingFileOverlay');
+  overlay.classList.add('show');
+  
+  let p = 0;
+  const pctText = document.getElementById('loadPercent');
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('loadText');
+  
+  pctText.textContent = '0%';
+  fill.style.width = '0%';
+  text.textContent = 'Đang nhập file...';
+  text.style.color = 'var(--text-sub)';
+
+  // Chạy hiệu ứng 0% - 100%
+  const timer = setInterval(() => {
+    p += Math.random() * 15 + 5;
+    if (p >= 100) p = 100;
+    
+    pctText.textContent = Math.floor(p) + '%';
+    fill.style.width = p + '%';
+    
+    if (p >= 100) {
+      clearInterval(timer);
+      text.textContent = 'Nhập thành công ✅';
+      text.style.color = 'var(--primary-dark)';
+      pctText.style.color = 'var(--primary-dark)';
+      
+      // Sau 1 giây thì tắt overlay và cập nhật trạng thái
+      setTimeout(() => {
+        overlay.classList.remove('show');
+        
+        // Cập nhật state
+        state.config = { name: 'PROXYfile-cofing-antiban', size: 2048 };
+        
+        // Cập nhật giao diện file box
+        document.getElementById('fileBox').classList.add('loaded');
+        document.getElementById('fileName').textContent = 'File config antiban';
+        document.getElementById('fileSize').textContent = '2 KB • Đã nạp vào tệp ✅';
+        
+        toast('✅ Đã nạp file config thành công');
+        
+        // Reset màu loading cho lần sau
+        text.style.color = 'var(--text-sub)';
+        pctText.style.color = 'var(--primary-dark)';
+      }, 1000);
+    }
+  }, 120);
 }
 
 function escapeHtml(s){
