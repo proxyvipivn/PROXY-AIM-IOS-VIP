@@ -6,380 +6,316 @@
 <title>PROXY VIP IOS</title>
 <style>
 :root{
-  --green:#00ff88;
-  --green2:#00cc6a;
-  --green-dim:#0a3a22;
-  --bg:#031a0f;
-  --panel:#062b18;
-  --panel2:#083a21;
+  --primary:#0ea5e9; /* Xanh đại dương */
+  --primary-dark:#0284c7;
+  --primary-light:#e0f2fe;
+  --bg:#f0f9ff;
+  --text:#0f172a;
+  --text-sub:#64748b;
+  --white:#ffffff;
+  --glass:rgba(255, 255, 255, 0.7);
+  --border:rgba(14, 165, 233, 0.2);
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
 html,body{height:100%;}
 body{
-  background:
-    radial-gradient(circle at 50% -10%, #06522f 0%, #031a0f 55%, #000 100%);
-  color:#c8ffe0;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #bae6fd 100%);
+  color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
-  padding-top:64px;
+  padding-top:80px;
   -webkit-font-smoothing:antialiased;
 }
 
-/* ===== HEADER (CỐ ĐỊNH) ===== */
+/* ===== HEADER ===== */
 header{
   position:fixed;
   top:0;left:0;right:0;
-  height:64px;
+  height:70px;
   display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#073c22 0%,#041f10 100%);
-  border-bottom:2px solid var(--green);
-  box-shadow:
-    0 0 18px rgba(0,255,136,.75),
-    0 0 40px rgba(0,255,136,.35),
-    inset 0 -1px 8px rgba(0,255,136,.4);
+  background:var(--glass);
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
   z-index:1000;
-  overflow:hidden;
 }
-header::before{
-  content:'';
-  position:absolute;top:0;left:-50%;width:200%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(0,255,136,.12),transparent);
-  animation:sweep 4s linear infinite;
-}
-@keyframes sweep{0%{transform:translateX(-50%)}100%{transform:translateX(50%)}}
 header h1{
-  font-size:20px;
-  letter-spacing:3px;
+  font-size:22px;
+  letter-spacing:2px;
   font-weight:800;
-  color:var(--green);
-  text-shadow:0 0 8px var(--green),0 0 20px rgba(0,255,136,.7);
-  position:relative;z-index:1;
+  color:var(--primary-dark);
+  display:flex;align-items:center;gap:8px;
 }
+header svg{width:24px;height:24px;fill:var(--primary-dark);}
 
 /* ===== SCREENS ===== */
-.screen{display:none;padding:20px 16px 120px;animation:fadeIn .35s ease;}
+.screen{display:none;padding:20px 16px 100px;animation:fadeIn .4s ease;}
 .screen.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== CARD ===== */
+/* ===== CARD (Kính mờ) ===== */
 .card{
-  background:linear-gradient(160deg,#06301c 0%,#041a0e 100%);
-  border:1px solid rgba(0,255,136,.35);
-  border-radius:16px;
-  padding:22px 18px;
-  box-shadow:
-    0 0 20px rgba(0,255,136,.25),
-    inset 0 0 25px rgba(0,255,136,.08);
-  margin-bottom:16px;
+  background:var(--white);
+  border-radius:24px;
+  padding:28px 22px;
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12), 0 1px 3px rgba(0,0,0,0.05);
+  border:1px solid var(--border);
+  margin-bottom:20px;
   position:relative;
+  overflow:hidden;
 }
-.card.glow{
-  box-shadow:
-    0 0 24px rgba(0,255,136,.5),
-    0 0 60px rgba(0,255,136,.2),
-    inset 0 0 25px rgba(0,255,136,.1);
+.card::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:4px;
+  background:linear-gradient(90deg, var(--primary), #38bdf8);
 }
 
 /* ===== KEY SCREEN ===== */
-.lock-icon{font-size:44px;text-align:center;margin-bottom:8px;filter:drop-shadow(0 0 12px var(--green));}
-.card h2{
-  text-align:center;font-size:18px;color:#fff;
-  text-shadow:0 0 10px var(--green);letter-spacing:1px;margin-bottom:6px;
+.lock-icon{
+  width:64px;height:64px;margin:0 auto 16px;
+  background:var(--primary-light);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
 }
-.card .sub{text-align:center;font-size:13px;color:#8fd6b5;margin-bottom:18px;}
+.lock-icon svg{width:32px;height:32px;fill:var(--primary);}
+.card h2{text-align:center;font-size:20px;color:var(--text);margin-bottom:6px;font-weight:800;}
+.card .sub{text-align:center;font-size:14px;color:var(--text-sub);margin-bottom:24px;}
 
 .input{
-  width:100%;padding:14px 16px;border-radius:12px;
-  background:#041a0e;
-  border:1.5px solid rgba(0,255,136,.35);
-  color:#e0fff0;font-size:15px;outline:none;
-  transition:.25s;
-  box-shadow:inset 0 0 10px rgba(0,255,136,.08);
+  width:100%;padding:16px;border-radius:16px;
+  background:#f8fafc;
+  border:2px solid #e2e8f0;
+  color:var(--text);font-size:16px;outline:none;
+  transition:.3s;font-weight:500;
 }
-.input::placeholder{color:#3e7a5e;}
+.input::placeholder{color:#94a3b8;font-weight:400;}
 .input:focus{
-  border-color:var(--green);
-  box-shadow:0 0 18px rgba(0,255,136,.6),inset 0 0 14px rgba(0,255,136,.2);
+  background:var(--white);
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px var(--primary-light);
 }
 .btn{
-  width:100%;margin-top:14px;padding:15px;border:none;border-radius:12px;
-  background:linear-gradient(180deg,#00ff88,#00b35f);
-  color:#002611;font-size:16px;font-weight:800;letter-spacing:1.5px;
+  width:100%;margin-top:16px;padding:16px;border:none;border-radius:16px;
+  background:linear-gradient(135deg, #0ea5e9, #0284c7);
+  color:var(--white);font-size:16px;font-weight:700;letter-spacing:1px;
   cursor:pointer;transition:.2s;
-  box-shadow:0 0 20px rgba(0,255,136,.6),0 4px 15px rgba(0,0,0,.5);
+  box-shadow:0 4px 15px rgba(14, 165, 233, 0.4);
 }
-.btn:active{transform:scale(.97);box-shadow:0 0 35px rgba(0,255,136,.9);}
-.hint{margin-top:18px;text-align:center;font-size:12px;color:#6fb894;}
-.hint p{margin-bottom:8px;}
-.hint code{
-  display:block;margin:5px 0;padding:8px 10px;border-radius:8px;
-  background:#021009;border:1px dashed rgba(0,255,136,.35);
-  color:var(--green);font-size:12px;letter-spacing:.5px;
-  word-break:break-all;
-}
+.btn:active{transform:scale(.97);box-shadow:0 2px 8px rgba(14, 165, 233, 0.4);}
 
 /* ===== SUCCESS OVERLAY ===== */
 .success-overlay{
   position:fixed;inset:0;z-index:2000;
   display:none;align-items:center;justify-content:center;flex-direction:column;
-  background:radial-gradient(circle,rgba(0,40,20,.85),rgba(0,0,0,.95));
-  backdrop-filter:blur(4px);
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
-.success-overlay.show{display:flex;animation:pop .35s ease;}
-.success-overlay .check{font-size:90px;filter:drop-shadow(0 0 25px var(--green));animation:bounce .6s ease;}
+.success-overlay.show{display:flex;animation:pop .3s ease;}
+.success-overlay .check{
+  width:100px;height:100px;border-radius:50%;
+  background:var(--primary-light);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 25px rgba(14, 165, 233, 0.3);
+  animation:bounce .6s ease;
+}
+.success-overlay .check svg{width:50px;height:50px;fill:var(--primary);}
 .success-overlay p{
-  margin-top:16px;font-size:20px;font-weight:800;color:var(--green);
-  letter-spacing:2px;text-shadow:0 0 15px var(--green);
+  margin-top:24px;font-size:22px;font-weight:800;color:var(--primary-dark);
+  letter-spacing:1px;
 }
 @keyframes pop{from{opacity:0}to{opacity:1}}
-@keyframes bounce{0%{transform:scale(.3)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes bounce{0%{transform:scale(.3)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 
-/* ===== HAMBURGER & SIDEBAR ===== */
+/* ===== HAMBURGER (Nút Menu tròn) ===== */
 .hamburger{
-  position:fixed;top:12px;left:12px;z-index:1100;
-  width:42px;height:42px;border-radius:10px;
-  background:linear-gradient(180deg,#083a21,#041a0e);
-  border:1.5px solid var(--green);
-  color:var(--green);font-size:20px;cursor:pointer;
-  box-shadow:0 0 14px rgba(0,255,136,.6);
+  position:fixed;top:15px;left:15px;z-index:1100;
+  width:40px;height:40px;border-radius:50%;
+  background:var(--white);
+  border:1px solid var(--border);
+  color:var(--primary-dark);
+  box-shadow:0 4px 10px rgba(14, 165, 233, 0.15);
   display:none;align-items:center;justify-content:center;
+  cursor:pointer;
 }
 .hamburger.show{display:flex;}
-.hamburger:active{transform:scale(.94);}
+.hamburger:active{transform:scale(.9);}
+.hamburger svg{width:20px;height:20px;fill:currentColor;}
 
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1150;
-  display:none;backdrop-filter:blur(2px);
-}
+/* ===== SIDEBAR ===== */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:1150;display:none;backdrop-filter:blur(2px);}
 .overlay.show{display:block;animation:pop .2s;}
 .sidebar{
-  position:fixed;top:0;left:-280px;width:270px;height:100%;z-index:1200;
-  background:linear-gradient(180deg,#041f10 0%,#021009 100%);
-  border-right:2px solid var(--green);
-  box-shadow:6px 0 30px rgba(0,255,136,.35);
-  transition:left .3s ease;
-  padding:80px 14px 30px;
+  position:fixed;top:0;left:-300px;width:280px;height:100%;z-index:1200;
+  background:var(--white);
+  box-shadow:10px 0 30px rgba(0,0,0,.1);
+  transition:left .3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding:90px 16px 30px;
   overflow-y:auto;
 }
 .sidebar.open{left:0;}
-.sidebar h3{
-  color:var(--green);font-size:13px;letter-spacing:2px;margin-bottom:14px;
-  text-shadow:0 0 8px var(--green);
-}
+.sidebar h3{color:var(--text-sub);font-size:12px;letter-spacing:1px;margin-bottom:16px;padding-left:12px;}
 .menu-item{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 12px;margin-bottom:8px;border-radius:10px;
-  background:rgba(0,255,136,.05);
-  border:1px solid rgba(0,255,136,.25);
-  color:#c8ffe0;font-size:14px;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;gap:14px;
+  padding:16px 12px;margin-bottom:6px;border-radius:14px;
+  color:var(--text);font-size:15px;font-weight:600;cursor:pointer;transition:.2s;
 }
-.menu-item:active{background:rgba(0,255,136,.2);transform:scale(.98);}
-.menu-item .ico{font-size:18px;}
-.menu-item.active{
-  background:rgba(0,255,136,.18);
-  border-color:var(--green);
-  box-shadow:0 0 14px rgba(0,255,136,.5);
-  color:#fff;
-}
+.menu-item:active{background:var(--bg);}
+.menu-item .ico{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.menu-item .ico svg{width:20px;height:20px;fill:var(--text-sub);transition:.2s;}
+.menu-item.active{background:var(--primary-light);color:var(--primary-dark);}
+.menu-item.active .ico svg{fill:var(--primary-dark);}
 
 /* ===== SECTION TITLES ===== */
 .sec-title{
-  font-size:16px;color:var(--green);letter-spacing:1.5px;font-weight:800;
-  text-shadow:0 0 10px rgba(0,255,136,.8);
-  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+  font-size:16px;color:var(--primary-dark);font-weight:800;
+  margin-bottom:16px;display:flex;align-items:center;gap:10px;
 }
-.sec-title::after{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,rgba(0,255,136,.6),transparent);
-}
+.sec-title svg{width:22px;height:22px;fill:var(--primary);}
 
-/* ===== ROW ===== */
+/* ===== ROW & TOGGLE ===== */
 .row{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 14px;margin-bottom:10px;border-radius:12px;
-  background:rgba(0,255,136,.04);
-  border:1px solid rgba(0,255,136,.22);
+  padding:16px;margin-bottom:12px;border-radius:16px;
+  background:#f8fafc;border:1px solid #e2e8f0;
 }
-.row .label{font-size:14px;color:#d4ffe8;font-weight:600;}
-.row .label small{display:block;font-size:11px;color:#6fb894;margin-top:3px;font-weight:400;}
-
-/* ===== TOGGLE SWITCH ===== */
-.switch-wrap{display:flex;align-items:center;gap:8px;}
-.switch-wrap .st{font-size:10px;color:#5d9c7a;letter-spacing:1px;font-weight:700;}
-.switch-wrap .st.on{color:var(--green);text-shadow:0 0 8px var(--green);}
-.switch{position:relative;display:inline-block;width:54px;height:28px;flex-shrink:0;}
+.row .label{font-size:14px;color:var(--text);font-weight:600;}
+.switch-wrap{display:flex;align-items:center;gap:10px;}
+.switch-wrap .st{font-size:10px;color:var(--text-sub);font-weight:700;}
+.switch-wrap .st.on{color:var(--primary-dark);}
+.switch{position:relative;display:inline-block;width:50px;height:28px;flex-shrink:0;}
 .switch input{opacity:0;width:0;height:0;}
-.slider{
-  position:absolute;cursor:pointer;inset:0;
-  background:#141414;border:1px solid #333;border-radius:28px;transition:.3s;
-}
-.slider::before{
-  content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;
-  background:#666;border-radius:50%;transition:.3s;
-}
-.switch input:checked + .slider{
-  background:rgba(0,255,136,.2);border-color:var(--green);
-  box-shadow:0 0 14px rgba(0,255,136,.7);
-}
-.switch input:checked + .slider::before{
-  transform:translateX(26px);background:var(--green);
-  box-shadow:0 0 10px var(--green);
-}
+.slider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:28px;transition:.3s;}
+.slider::before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:var(--white);border-radius:50%;transition:.3s;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.switch input:checked + .slider{background:var(--primary);}
+.switch input:checked + .slider::before{transform:translateX(22px);}
 
 /* ===== FF SELECT ===== */
-.ff-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+.ff-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
 .ff-card{
-  padding:20px 10px;border-radius:14px;text-align:center;cursor:pointer;
-  background:rgba(0,255,136,.04);
-  border:1.5px solid rgba(0,255,136,.25);
-  transition:.2s;
+  padding:24px 12px;border-radius:16px;text-align:center;cursor:pointer;
+  background:#f8fafc;border:2px solid #e2e8f0;transition:.2s;
 }
-.ff-card:active{transform:scale(.97);}
-.ff-card.sel{
-  background:rgba(0,255,136,.18);
-  border-color:var(--green);
-  box-shadow:0 0 20px rgba(0,255,136,.6);
-}
-.ff-card .em{font-size:30px;display:block;margin-bottom:6px;}
-.ff-card .nm{font-size:13px;font-weight:700;color:#d4ffe8;}
+.ff-card.sel{border-color:var(--primary);background:var(--primary-light);box-shadow:0 4px 15px rgba(14, 165, 233, 0.2);}
+.ff-card .nm{font-size:14px;font-weight:700;color:var(--text);}
+.ff-card.sel .nm{color:var(--primary-dark);}
 
 /* ===== PROGRESS RING ===== */
-.loader-wrap{text-align:center;padding:24px 0;display:none;}
+.loader-wrap{text-align:center;padding:30px 0;display:none;}
 .loader-wrap.show{display:block;}
 .ring{
-  width:160px;height:160px;border-radius:50%;margin:0 auto;
-  background:conic-gradient(var(--green) 0deg, #0a2a1a 0deg);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 30px rgba(0,255,136,.55),inset 0 0 20px rgba(0,255,136,.15);
-  transition:background .1s linear;
+  width:140px;height:140px;border-radius:50%;margin:0 auto;
+  background:conic-gradient(var(--primary) 0deg, #e2e8f0 0deg);
+  display:flex;align-items:center;justify-content:center;transition:background .1s linear;
 }
 .ring-inner{
-  width:126px;height:126px;border-radius:50%;
-  background:#04160d;
+  width:110px;height:110px;border-radius:50%;background:var(--white);
   display:flex;align-items:center;justify-content:center;
-  font-size:30px;font-weight:900;color:var(--green);
-  text-shadow:0 0 14px var(--green);
-  box-shadow:inset 0 0 20px rgba(0,255,136,.25);
+  font-size:26px;font-weight:800;color:var(--primary-dark);
 }
-.loader-text{margin-top:16px;font-size:14px;color:#8fd6b5;letter-spacing:1px;}
-.loader-text.ok{color:var(--green);font-weight:800;text-shadow:0 0 10px var(--green);}
+.loader-text{margin-top:16px;font-size:14px;color:var(--text-sub);font-weight:600;}
+.loader-text.ok{color:var(--primary-dark);}
 
 /* ===== RANGE ===== */
-.range-box{padding:8px 4px;}
-.range-val{
-  display:flex;justify-content:space-between;margin-bottom:10px;
-  font-size:13px;color:#8fd6b5;
-}
-.range-val b{color:var(--green);text-shadow:0 0 8px var(--green);}
+.range-box{padding:10px 4px;}
+.range-val{display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px;color:var(--text-sub);font-weight:600;}
+.range-val b{color:var(--primary-dark);}
 input[type=range]{
   -webkit-appearance:none;width:100%;height:8px;border-radius:8px;outline:none;
-  background:linear-gradient(90deg,var(--green) 0%,var(--green) 0%,#0a2a1a 0%);
-  box-shadow:inset 0 0 10px rgba(0,0,0,.7),0 0 12px rgba(0,255,136,.4);
+  background:linear-gradient(90deg,var(--primary) 0%,var(--primary) 0%,#e2e8f0 0%);
 }
 input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
-  background:radial-gradient(circle,#00ff88,#00b35f);
-  cursor:pointer;box-shadow:0 0 16px var(--green),0 0 30px rgba(0,255,136,.6);
-  border:2px solid #052b18;
-}
-input[type=range]::-moz-range-thumb{
-  width:24px;height:24px;border-radius:50%;background:var(--green);
-  cursor:pointer;box-shadow:0 0 16px var(--green);border:none;
+  -webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+  background:var(--white);border:3px solid var(--primary);cursor:pointer;
+  box-shadow:0 2px 8px rgba(14, 165, 233, 0.4);
 }
 
 /* ===== FILE UPLOAD ===== */
 .file-box{
-  display:flex;align-items:center;gap:14px;
-  padding:16px;border-radius:12px;
-  background:rgba(0,255,136,.05);
-  border:1.5px dashed rgba(0,255,136,.4);
-  margin-top:8px;
+  display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;
+  background:#f8fafc;border:2px dashed #cbd5e1;margin-top:8px;transition:.3s;
 }
-.file-icon{font-size:34px;filter:drop-shadow(0 0 10px var(--green));}
-.file-info{flex:1;min-width:0;}
-.file-info .fn{font-size:13px;color:#d4ffe8;font-weight:700;word-break:break-all;}
-.file-info .fs{font-size:11px;color:#6fb894;margin-top:3px;}
+.file-box.loaded{border-style:solid;border-color:var(--primary);background:var(--primary-light);}
+.file-icon{width:44px;height:44px;background:var(--white);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+.file-icon svg{width:24px;height:24px;fill:var(--primary);}
+.file-info{flex:1;}
+.file-info .fn{font-size:14px;color:var(--text);font-weight:700;word-break:break-all;}
+.file-info .fs{font-size:12px;color:var(--text-sub);margin-top:4px;}
 .file-plus{
-  width:44px;height:44px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#00ff88,#00b35f);
-  color:#002611;font-size:26px;font-weight:900;cursor:pointer;
-  box-shadow:0 0 20px rgba(0,255,136,.75);
-  transition:.2s;
+  width:40px;height:40px;border-radius:12px;background:var(--primary);
+  color:var(--white);display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:600;cursor:pointer;transition:.2s;
+  box-shadow:0 4px 10px rgba(14, 165, 233, 0.3);
 }
 .file-plus:active{transform:scale(.9);}
-.file-box.loaded{border-style:solid;border-color:var(--green);box-shadow:0 0 18px rgba(0,255,136,.5);}
 
-/* ===== DEVICE LIST ===== */
-.device-item{
-  display:flex;align-items:center;gap:12px;
-  padding:14px;border-radius:12px;margin-bottom:10px;
-  background:rgba(0,255,136,.05);
-  border:1px solid rgba(0,255,136,.25);
-}
-.device-item .di{font-size:24px;}
-.device-item .dt{flex:1;font-size:13px;}
-.device-item .dt b{color:var(--green);}
-.device-item .dt small{display:block;color:#6fb894;margin-top:3px;font-size:11px;}
+/* ===== DEVICE LIST & BADGE ===== */
+.device-item{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;margin-bottom:12px;background:#f8fafc;border:1px solid #e2e8f0;}
+.device-item .di{width:36px;height:36px;background:var(--white);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.device-item .di svg{width:20px;height:20px;fill:var(--primary);}
+.device-item .dt{flex:1;font-size:14px;}
+.device-item .dt b{color:var(--text);display:block;margin-bottom:2px;}
+.device-item .dt small{color:var(--text-sub);font-size:12px;}
+.badge{padding:6px 12px;border-radius:20px;background:var(--primary-light);color:var(--primary-dark);font-size:11px;font-weight:800;}
 
 /* ===== TOAST ===== */
 .toast{
-  position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(120px);
-  padding:14px 22px;border-radius:12px;
-  background:linear-gradient(180deg,#083a21,#041a0e);
-  border:1.5px solid var(--green);
-  color:var(--green);font-size:14px;font-weight:700;
-  box-shadow:0 0 25px rgba(0,255,136,.75);
-  z-index:3000;transition:.35s;white-space:nowrap;max-width:92vw;
-  text-align:center;
+  position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(100px);
+  padding:14px 24px;border-radius:30px;
+  background:var(--text);color:var(--white);
+  font-size:14px;font-weight:600;z-index:3000;transition:.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);white-space:nowrap;max-width:90vw;
 }
 .toast.show{transform:translateX(-50%) translateY(0);}
-.toast.err{border-color:#ff3b3b;color:#ff6b6b;box-shadow:0 0 25px rgba(255,60,60,.7);}
-
-/* ===== KEY BADGE ===== */
-.badge{
-  display:inline-block;padding:4px 10px;border-radius:20px;
-  background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.5);
-  color:var(--green);font-size:11px;font-weight:800;letter-spacing:1px;
-  text-shadow:0 0 6px var(--green);
-}
-
-.empty{text-align:center;color:#4d8a6c;font-size:13px;padding:20px 0;}
-
-/* Ẩn khi chưa cần */
+.toast.err{background:#ef4444;}
+.empty{text-align:center;color:var(--text-sub);font-size:14px;padding:24px 0;}
 .hidden{display:none !important;}
+
+/* Label Input */
+.input-label{font-size:12px;font-weight:700;color:var(--text-sub);margin:0 0 8px 4px;display:block;letter-spacing:0.5px;}
 </style>
 </head>
 <body>
 
-<!-- ===== HEADER CỐ ĐỊNH ===== -->
+<!-- ===== HEADER ===== -->
 <header>
-  <h1>PROXY VIP IOS</h1>
+  <h1>
+    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+    PROXY VIP IOS
+  </h1>
 </header>
 
-<button class="hamburger" id="hamburger" onclick="toggleMenu()">☰</button>
+<!-- Nút Menu Nổi -->
+<button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
 
-<!-- ===== SIDEBAR MENU ===== -->
+<!-- ===== SIDEBAR ===== -->
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 <nav class="sidebar" id="sidebar">
   <h3>DANH MỤC</h3>
   <div class="menu-item active" data-sec="ff" onclick="showSection('ff')">
-    <span class="ico">🔥</span> Free Fire - Free Fire Max
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg></div> 
+    Free Fire - FF Max
   </div>
   <div class="menu-item" data-sec="aim" onclick="showSection('aim')">
-    <span class="ico">🎯</span> AIM - Antena
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg></div> 
+    AIM - Antena
   </div>
   <div class="menu-item" data-sec="ib" onclick="showSection('ib')">
-    <span class="ico">🆔</span> Nhập IB game
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg></div> 
+    Nhập IB game
   </div>
   <div class="menu-item" data-sec="device" onclick="showSection('device')">
-    <span class="ico">📱</span> Thiết bị
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></div> 
+    Thiết bị
   </div>
   <div class="menu-item" data-sec="keytime" onclick="showSection('keytime')">
-    <span class="ico">⏱️</span> Thời gian key
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div> 
+    Thời gian key
   </div>
   <div class="menu-item" data-sec="config" onclick="showSection('config')">
-    <span class="ico">📁</span> Nhập file config antiban
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div> 
+    File config antiban
   </div>
 </nav>
 
@@ -387,36 +323,31 @@ input[type=range]::-moz-range-thumb{
 
   <!-- ================= SCREEN 1: NHẬP KEY ================= -->
   <section class="screen active" id="screen-key">
-    <div class="card glow">
-      <div class="lock-icon">🔐</div>
-      <h2>PROXY IOS VIP 1 thiết bị</h2>
-      <p class="sub">Nhập key để kích hoạt…</p>
-      <input id="keyInput" class="input" placeholder="Nhập key tại đây…" autocomplete="off" spellcheck="false">
-      <button class="btn" onclick="activateKey()">KÍCH HOẠT</button>
-      <div class="hint">
-        <p>Key có sẵn:</p>
-        <code>PROXY-3018484-IOS-103-VIP</code>
-        <code>PROXY-4928478-IOS-100-VIP</code>
+    <div class="card">
+      <div class="lock-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
       </div>
+      <h2>PROXY IOS VIP</h2>
+      <p class="sub">Vui lòng nhập key để kích hoạt</p>
+      
+      <input id="keyInput" class="input" placeholder="Nhập key tại đây..." autocomplete="off" spellcheck="false">
+      <button class="btn" onclick="activateKey()">KÍCH HOẠT</button>
     </div>
   </section>
 
   <!-- ================= SCREEN 2: NHẬP THÔNG TIN ================= -->
   <section class="screen" id="screen-device">
-    <div class="card glow">
-      <h2 style="text-align:left;margin-bottom:16px;">Nhập đầy đủ thông tin 👤</h2>
+    <div class="card">
+      <h2 style="text-align:left;margin-bottom:20px;font-size:18px;">Nhập thông tin thiết bị</h2>
 
-      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">LOẠI MÁY</label>
-      <input class="input" id="devType" value="IOS" readonly
-             style="margin:6px 0 14px;color:var(--green);font-weight:800;letter-spacing:2px;">
+      <label class="input-label">LOẠI MÁY</label>
+      <input class="input" id="devType" value="IOS" readonly style="margin-bottom:16px;background:#e2e8f0;color:var(--primary-dark);font-weight:800;">
 
-      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">TÊN MÁY</label>
-      <input class="input" id="devName" placeholder="VD: iPhone 12"
-             style="margin:6px 0 14px;" autocomplete="off">
+      <label class="input-label">TÊN MÁY</label>
+      <input class="input" id="devName" placeholder="VD: iPhone 12 Pro Max" style="margin-bottom:16px;" autocomplete="off">
 
-      <label style="font-size:12px;color:#8fd6b5;letter-spacing:1px;">IOS BAO NHIÊU</label>
-      <input class="input" id="devIOS" placeholder="VD: 27.0"
-             style="margin:6px 0 18px;" autocomplete="off">
+      <label class="input-label">PHIÊN BẢN IOS</label>
+      <input class="input" id="devIOS" placeholder="VD: 27.0" style="margin-bottom:24px;" autocomplete="off">
 
       <button class="btn" onclick="confirmDevice()">XÁC NHẬN</button>
     </div>
@@ -428,17 +359,18 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== FF ===== -->
     <div class="section" id="sec-ff">
       <div class="card">
-        <div class="sec-title">🔥 FREE FIRE - FREE FIRE MAX</div>
-        <p style="font-size:12px;color:#8fd6b5;margin-bottom:14px;">
-          Dùng Free Fire gì thì chọn Free Fire đó. Phải chọn Free Fire gì mới bật được hack.
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+          Free Fire - FF Max
+        </div>
+        <p style="font-size:13px;color:var(--text-sub);margin-bottom:16px;">
+          Vui lòng chọn phiên bản Free Fire bạn đang chơi để tiến hành nạp.
         </p>
         <div class="ff-options">
           <div class="ff-card" id="ff-card-ff" onclick="startFFLoad('ff')">
-            <span class="em">🔥</span>
             <span class="nm">FREE FIRE</span>
           </div>
           <div class="ff-card" id="ff-card-max" onclick="startFFLoad('ffmax')">
-            <span class="em">🔥🔥</span>
             <span class="nm">FREE FIRE MAX</span>
           </div>
         </div>
@@ -447,7 +379,7 @@ input[type=range]::-moz-range-thumb{
           <div class="ring" id="ring">
             <div class="ring-inner" id="ringPct">0%</div>
           </div>
-          <div class="loader-text" id="loaderText">Đang nạp… 0%</div>
+          <div class="loader-text" id="loaderText">Đang khởi tạo... 0%</div>
         </div>
       </div>
     </div>
@@ -455,13 +387,19 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== AIM ===== -->
     <div class="section hidden" id="sec-aim">
       <div class="card">
-        <div class="sec-title">🎯 AIM - ANTENA</div>
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+          AIM - ANTENA
+        </div>
         <div id="aimList"></div>
       </div>
 
       <div class="card">
-        <div class="sec-title">📡 ANTENA VIP</div>
-        <p style="font-size:12px;color:#8fd6b5;margin-bottom:12px;">
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          ANTENA VIP
+        </div>
+        <p style="font-size:13px;color:var(--text-sub);margin-bottom:16px;">
           Định vị quay màn hình — chỉnh từ 0% đến 100%
         </p>
         <div class="range-box">
@@ -470,8 +408,7 @@ input[type=range]::-moz-range-thumb{
             <b id="antVal">50%</b>
             <span>100%</span>
           </div>
-          <input type="range" id="antRange" min="0" max="100" value="50"
-                 oninput="updateAntena(this.value)">
+          <input type="range" id="antRange" min="0" max="100" value="50" oninput="updateAntena(this.value)">
         </div>
       </div>
     </div>
@@ -479,11 +416,14 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== IB ===== -->
     <div class="section hidden" id="sec-ib">
       <div class="card">
-        <div class="sec-title">🆔 NHẬP IB GAME</div>
-        <input class="input" id="ibInput" placeholder="ib: …………………" autocomplete="off">
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg>
+          NHẬP IB GAME
+        </div>
+        <input class="input" id="ibInput" placeholder="Nhập ib: ..." autocomplete="off">
         <button class="btn" onclick="saveIB()">LƯU IB</button>
-        <p id="ibSaved" style="margin-top:12px;font-size:12px;color:var(--green);text-align:center;display:none;">
-          ✅ Đã lưu IB: <b id="ibShow"></b>
+        <p id="ibSaved" style="margin-top:16px;font-size:14px;color:var(--primary-dark);text-align:center;display:none;font-weight:700;">
+          Đã lưu IB: <span id="ibShow"></span>
         </p>
       </div>
     </div>
@@ -491,7 +431,10 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== DEVICE ===== -->
     <div class="section hidden" id="sec-device">
       <div class="card">
-        <div class="sec-title">📱 THIẾT BỊ ĐÃ NHẬP</div>
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg>
+          THIẾT BỊ ĐÃ NHẬP
+        </div>
         <div id="deviceList">
           <div class="empty">Chưa có thiết bị nào</div>
         </div>
@@ -501,7 +444,10 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== KEY TIME ===== -->
     <div class="section hidden" id="sec-keytime">
       <div class="card">
-        <div class="sec-title">⏱️ THỜI GIAN KEY</div>
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          THỜI GIAN KEY
+        </div>
         <div id="keyTimeBox">
           <div class="empty">Chưa kích hoạt key</div>
         </div>
@@ -511,29 +457,34 @@ input[type=range]::-moz-range-thumb{
     <!-- ===== CONFIG ===== -->
     <div class="section hidden" id="sec-config">
       <div class="card">
-        <div class="sec-title">📁 NHẬP FILE CONFIG - ANTIBAN</div>
-        <div class="file-box" id="fileBox">
-          <div class="file-icon">📄</div>
-          <div class="file-info">
-            <div class="fn" id="fileName">Chưa có file config</div>
-            <div class="fs" id="fileSize">Nhấn dấu + để nhập file</div>
-          </div>
-          <div class="file-plus" onclick="document.getElementById('fileInput').click()">+</div>
+        <div class="sec-title">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          FILE CONFIG - ANTIBAN
         </div>
-        <input type="file" id="fileInput" class="hidden" accept="*/*" onchange="handleConfig(this)">
+        <div class="file-box" id="fileBox">
+          <div class="file-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          </div>
+          <div class="file-info">
+            <div class="fn" id="fileName">Chưa nạp file config</div>
+            <div class="fs" id="fileSize">Nhấn dấu + để tự động nạp</div>
+          </div>
+          <div class="file-plus" onclick="autoLoadConfig()">+</div>
+        </div>
       </div>
     </div>
 
   </section>
 </main>
 
-<!-- ===== OVERLAY THÀNH CÔNG ===== -->
+<!-- ===== OVERLAY ===== -->
 <div class="success-overlay" id="successOverlay">
-  <div class="check">✅</div>
+  <div class="check">
+    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+  </div>
   <p>KÍCH HOẠT THÀNH CÔNG</p>
 </div>
 
-<!-- ===== TOAST ===== -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -541,30 +492,22 @@ input[type=range]::-moz-range-thumb{
 const state = {
   activated: false,
   key: null,
-  keyTime: null,          // '1 ngày' | '7 ngày' | '30 ngày' | 'Vĩnh viễn'
-  device: null,           // {name, ios}
-  devices: [],            // danh sách thiết bị
-  config: null,           // {name, size, content}
-  ffMode: null,           // 'ff' | 'ffmax'
+  keyTime: null,
+  device: null,
+  devices: [],
+  config: null,
+  ffMode: null,
   ib: '',
-  aims: {                 // 6 loại aim
-    'drag': false,
-    'neck': false,
-    'body': false,
-    'drag_ant': false,
-    'neck_ant': false,
-    'body_ant': false
-  },
+  aims: { 'drag': false, 'neck': false, 'body': false, 'drag_ant': false, 'neck_ant': false, 'body_ant': false },
   antPower: 50
 };
 
-/* Danh sách key hợp lệ */
+/* 2 KEY ĐÚNG (Bắt buộc phải nhập đúng) */
 const VALID_KEYS = {
   'PROXY-3018484-IOS-103-VIP': { time: 'Vĩnh viễn' },
   'PROXY-4928478-IOS-100-VIP': { time: 'Vĩnh viễn' }
 };
 
-/* Các loại aim */
 const AIM_LIST = [
   { id: 'drag',      name: 'AIM → Drag' },
   { id: 'neck',      name: 'AIM → Neck' },
@@ -573,6 +516,37 @@ const AIM_LIST = [
   { id: 'neck_ant',  name: 'AIM → Neck + Antena' },
   { id: 'body_ant',  name: 'AIM → Body + Antena' }
 ];
+
+const DEFAULT_CONFIG = `# =========================================
+#  PROXYfile-cofing-antiban
+#  Anti-Ban Configuration - PROXY VIP IOS
+# =========================================
+[PROXY]
+version = 1.0.0
+device = IOS
+mode = VIP
+status = ENABLED
+[ANTIBAN]
+enabled = true
+bypass_safetynet = true
+spoof_device_id = true
+hide_root = true
+randomize_mac = true
+delay_ms = 120
+safe_mode = STRICT
+[AIM]
+smooth = 0.85
+fov = 180
+max_distance = 400
+prediction = true
+humanize = true
+[ANTENA]
+sensitivity = 1.0
+rotate_lock = false
+priority = HEAD
+[SIGNATURE]
+checksum = 9F3A-B17C-4491-DA20
+owner = PROXY VIP IOS`;
 
 /* ================= TOAST ================= */
 let toastTimer;
@@ -598,24 +572,27 @@ function activateKey(){
   const key = input.value.trim().toUpperCase();
 
   if(!key){
-    toast('Vui lòng nhập key ❌', true);
+    toast('Vui lòng nhập key!', true);
     return;
   }
 
-  const found = VALID_KEYS[key];
-  if(!found){
-    toast('Key không hợp lệ ❌', true);
-    input.style.borderColor = '#ff3b3b';
-    setTimeout(() => input.style.borderColor = '', 900);
+  // Nếu không nằm trong danh sách VALID_KEYS -> Báo sai
+  if(!VALID_KEYS[key]){
+    toast('Key không đúng ❌', true);
+    input.style.borderColor = '#ef4444';
+    input.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.2)';
+    setTimeout(() => {
+      input.style.borderColor = '';
+      input.style.boxShadow = '';
+    }, 1500);
     return;
   }
 
-  // Thành công
+  // Nếu đúng key
   state.activated = true;
   state.key = key;
-  state.keyTime = found.time;
+  state.keyTime = VALID_KEYS[key].time;
 
-  // Hiện overlay ✅ trong 3 giây
   const ov = document.getElementById('successOverlay');
   ov.classList.add('show');
 
@@ -630,20 +607,14 @@ function confirmDevice(){
   const name = document.getElementById('devName').value.trim();
   const ios  = document.getElementById('devIOS').value.trim();
 
-  if(!name){ toast('Nhập tên máy ❌', true); return; }
-  if(!ios){  toast('Nhập phiên bản IOS ❌', true); return; }
+  if(!name){ toast('Vui lòng nhập tên máy!', true); return; }
+  if(!ios){  toast('Vui lòng nhập phiên bản IOS!', true); return; }
 
   state.device = { name, ios };
-  state.devices.push({
-    name,
-    ios,
-    time: new Date().toLocaleString('vi-VN')
-  });
+  state.devices.push({ name, ios, time: new Date().toLocaleString('vi-VN') });
 
-  // Hiện thông báo
-  toast('🚀 Thiết bị tương thích thành công 🚀');
+  toast('🚀 Thiết bị tương thích thành công!');
 
-  // Chuyển vào main + mở menu
   setTimeout(() => {
     showScreen('screen-main');
     document.getElementById('hamburger').classList.add('show');
@@ -651,7 +622,7 @@ function confirmDevice(){
     renderKeyTime();
     renderAimList();
     showSection('ff');
-  }, 700);
+  }, 800);
 }
 
 /* ================= MENU ================= */
@@ -661,16 +632,13 @@ function toggleMenu(){
 }
 
 function showSection(sec){
-  // ẩn tất cả
   document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
   document.getElementById('sec-' + sec).classList.remove('hidden');
 
-  // menu active
   document.querySelectorAll('.menu-item').forEach(m => {
     m.classList.toggle('active', m.dataset.sec === sec);
   });
 
-  // đóng menu
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -678,7 +646,6 @@ function showSection(sec){
 
 /* ================= 3. FREE FIRE LOAD ================= */
 function startFFLoad(mode){
-  // reset chọn
   document.getElementById('ff-card-ff').classList.remove('sel');
   document.getElementById('ff-card-max').classList.remove('sel');
   document.getElementById(mode === 'ff' ? 'ff-card-ff' : 'ff-card-max').classList.add('sel');
@@ -692,25 +659,24 @@ function startFFLoad(mode){
 
   wrap.classList.add('show');
   txt.classList.remove('ok');
-  txt.textContent = 'Đang nạp… 0%';
+  txt.textContent = 'Đang khởi tạo... 0%';
 
   let p = 0;
   const timer = setInterval(() => {
-    p += Math.random() * 7 + 3;
+    p += Math.random() * 8 + 2;
     if(p >= 100) p = 100;
 
     pct.textContent = Math.floor(p) + '%';
-    ring.style.background =
-      `conic-gradient(var(--green) ${p * 3.6}deg, #0a2a1a ${p * 3.6}deg)`;
-    txt.textContent = 'Đang nạp… ' + Math.floor(p) + '%';
+    ring.style.background = `conic-gradient(var(--primary) ${p * 3.6}deg, #e2e8f0 ${p * 3.6}deg)`;
+    txt.textContent = 'Đang khởi tạo... ' + Math.floor(p) + '%';
 
     if(p >= 100){
       clearInterval(timer);
       txt.textContent = '✅ Nhập thành công';
       txt.classList.add('ok');
-      toast('🔥 ' + (mode === 'ff' ? 'FREE FIRE' : 'FREE FIRE MAX') + ' đã chọn — Nhập thành công');
+      toast('🔥 ' + (mode === 'ff' ? 'FREE FIRE' : 'FREE FIRE MAX') + ' đã sẵn sàng!');
     }
-  }, 90);
+  }, 100);
 }
 
 /* ================= 4. AIM LIST ================= */
@@ -726,9 +692,7 @@ function renderAimList(){
       <div class="switch-wrap">
         <span class="st" id="st-off-${item.id}">TẮT</span>
         <label class="switch">
-          <input type="checkbox" data-aim="${item.id}"
-                 ${state.aims[item.id] ? 'checked' : ''}
-                 onchange="onAimToggle(this)">
+          <input type="checkbox" data-aim="${item.id}" ${state.aims[item.id] ? 'checked' : ''} onchange="onAimToggle(this)">
           <span class="slider"></span>
         </label>
         <span class="st" id="st-on-${item.id}">BẬT</span>
@@ -740,20 +704,13 @@ function renderAimList(){
 
 function onAimToggle(el){
   const id = el.dataset.aim;
-
-  // Chưa có file config → chặn
   if(!state.config){
     el.checked = false;
-    toast('Bạn cần nhập file-cofing-antiban ❌', true);
+    toast('Vui lòng nhập file-cofing-antiban trước ❌', true);
     return;
   }
-
   state.aims[id] = el.checked;
-  if(el.checked){
-    toast('✅ Kích hoạt thành công: ' + AIM_LIST.find(a => a.id === id).name);
-  } else {
-    toast('Đã tắt: ' + AIM_LIST.find(a => a.id === id).name);
-  }
+  toast(el.checked ? '✅ Kích hoạt thành công' : 'Đã tắt tính năng');
 }
 
 /* ================= 5. ANTENA VIP ================= */
@@ -761,18 +718,15 @@ function updateAntena(v){
   v = parseInt(v);
   state.antPower = v;
   document.getElementById('antVal').textContent = v + '%';
-
   const range = document.getElementById('antRange');
-  range.style.background =
-    `linear-gradient(90deg, var(--green) ${v}%, #0a2a1a ${v}%)`;
+  range.style.background = `linear-gradient(90deg, var(--primary) ${v}%, #e2e8f0 ${v}%)`;
 }
 document.addEventListener('DOMContentLoaded', () => updateAntena(50));
 
 /* ================= 6. NHẬP IB ================= */
 function saveIB(){
   const v = document.getElementById('ibInput').value.trim();
-  if(!v){ toast('Vui lòng nhập IB ❌', true); return; }
-
+  if(!v){ toast('Vui lòng nhập IB!', true); return; }
   state.ib = v;
   document.getElementById('ibShow').textContent = v;
   document.getElementById('ibSaved').style.display = 'block';
@@ -788,7 +742,7 @@ function renderDevices(){
   }
   box.innerHTML = state.devices.map(d => `
     <div class="device-item">
-      <div class="di">📱</div>
+      <div class="di"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></div>
       <div class="dt">
         <b>${escapeHtml(d.name)}</b>
         <small>IOS ${escapeHtml(d.ios)} • ${d.time}</small>
@@ -807,36 +761,28 @@ function renderKeyTime(){
   }
   box.innerHTML = `
     <div class="row">
-      <div class="label">Thời gian key<small>${escapeHtml(state.key)}</small></div>
+      <div class="label" style="flex:1;">Thời gian key<br><span style="font-size:11px;color:var(--text-sub);font-weight:400;">${escapeHtml(state.key)}</span></div>
       <span class="badge">${state.keyTime}</span>
     </div>
     <div class="row">
-      <div class="label">Trạng thái</div>
-      <span class="badge">✅ ĐÃ KÍCH HOẠT</span>
+      <div class="label" style="flex:1;">Trạng thái</div>
+      <span class="badge" style="background:#dcfce7;color:#166534;">ĐÃ KÍCH HOẠT</span>
     </div>
   `;
 }
 
-/* ================= 9. NHẬP FILE CONFIG ================= */
-function handleConfig(input){
-  const file = input.files[0];
-  if(!file) return;
+/* ================= 9. NHẬP FILE CONFIG (AUTO) ================= */
+function autoLoadConfig(){
+  const blob = new Blob([DEFAULT_CONFIG], { type: 'text/plain;charset=utf-8' });
+  const file = new File([blob], 'PROXYfile-cofing-antiban', { type: 'text/plain' });
 
   const reader = new FileReader();
   reader.onload = e => {
-    state.config = {
-      name: 'PROXYfile-cofing-antiban',
-      original: file.name,
-      size: file.size,
-      content: e.target.result
-    };
-
+    state.config = { name: 'PROXYfile-cofing-antiban', size: file.size, content: e.target.result };
     document.getElementById('fileBox').classList.add('loaded');
     document.getElementById('fileName').textContent = 'PROXYfile-cofing-antiban';
-    document.getElementById('fileSize').textContent =
-      formatSize(file.size) + ' • Đã nạp vào tệp';
-
-    toast('✅ Đã nhập file config antiban');
+    document.getElementById('fileSize').textContent = formatSize(file.size) + ' • Đã nạp thành công ✅';
+    toast('✅ Đã nạp file config thành công');
   };
   reader.readAsText(file);
 }
@@ -847,14 +793,11 @@ function formatSize(b){
   return (b/1048576).toFixed(2) + ' MB';
 }
 
-/* ================= UTIL ================= */
 function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 }
 
-/* ================= ENTER KEY ================= */
+/* Enter key */
 document.getElementById('keyInput').addEventListener('keydown', e => {
   if(e.key === 'Enter') activateKey();
 });
